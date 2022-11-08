@@ -8,7 +8,7 @@ const User = require("../models/User");
 // ROUTE 1: Fetch notes using: POST "/api/auth/getnotes". Login required
 router.get("/getnotes", authUser, async (req, res) => {
   try {
-    const notes = await Note.find({ userid: req.user.id });
+    const notes = await Note.find({ id: req.user.id });
     res.send(notes);
   } catch (error) {
     res.status(500).send("Internal server error");
