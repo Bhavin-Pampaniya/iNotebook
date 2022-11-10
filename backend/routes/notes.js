@@ -17,7 +17,7 @@ router.get("/getnotes", authUser, async (req, res) => {
 
 // ROUTE 2: Adding notes using: POST "/api/auth/addnote". Login required
 router.post(
-  "/addnotes",
+  "/addnote",
   authUser,
   [
     body("title", "title should be atleast of 3 character").isLength({
