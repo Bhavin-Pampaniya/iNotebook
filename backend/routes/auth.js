@@ -1,5 +1,5 @@
-// require("dotenv").config();
-const PRIVATE_KEY = "mynameisbhavinpampaniya";
+require("dotenv").config();
+// const PRIVATE_KEY = "mynameisbhavinpampaniya";
 const express = require("express");
 const User = require("../models/User");
 const router = express.Router();
@@ -47,7 +47,7 @@ router.post(
           id: user._id,
         },
       };
-      // const PRIVATE_KEY = process.env.PRIVATE_KEY;
+      const PRIVATE_KEY = process.env.PRIVATE_KEY;
       // console.log(PRIVATE_KEY);
       const authToken = jwt.sign(payload, PRIVATE_KEY);
       res.json({ authToken });
@@ -88,8 +88,8 @@ router.post(
           id: user._id,
         },
       };
-      // const token = jwt.sign(payload, process.env.PRIVATE_KEY);
-      const token = jwt.sign(payload, PRIVATE_KEY);
+      const token = jwt.sign(payload, process.env.PRIVATE_KEY);
+      // const token = jwt.sign(payload, PRIVATE_KEY);
       // res.json({"success":"welcome you've successfully logged in"})
       res.json({ token });
     } catch (error) {    

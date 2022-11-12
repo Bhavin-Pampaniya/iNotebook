@@ -58,6 +58,7 @@ const NoteState = (props) => {
     };
     await fetch(`${host}/api/notes/deletenote/${id}`, header);
     await getNotes();
+     
     //Client side code
 
     // setNotes(
@@ -71,7 +72,7 @@ const NoteState = (props) => {
     //API call
     const header = {
       method: "PUT",
-      headers: {
+      headers: { 
         "Content-Type": "application/json",
         "auth-token":
           "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM2OGU1MjNlNzNmMjM3OTg5ODNmZjFlIn0sImlhdCI6MTY2NzgyMTM1N30.8LngCJ5nKtj83YW8X6eGaY3EOzciu9Ek_S7ejYKFHVg",
@@ -90,6 +91,7 @@ const NoteState = (props) => {
       element.tag = tag;
       }
     }
+    getNotes();
   };
 
   return (

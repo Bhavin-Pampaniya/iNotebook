@@ -5,12 +5,14 @@ import Noteitem from "../components/Noteitem";
 function Notes() {
   const Context = useContext(noteContext);
   console.log("this is context", Context);
-  const { notes, getNotes,editNote } = Context;
+  const { notes, getNotes,editNote,deleteNote } = Context;
   const [note, setNote] = useState({id:"",etitle:"",edescription:"",etag:""});
+  const [delid, setdelId] = useState(null)
   console.log("this is notes", notes);
   const ref = useRef(null);
-  // const refAlert = useRef(null);
+  const refAlert = useRef(null);
   const refClose = useRef(null);
+  const refDel = useRef(null);
   useEffect(() => {
     getNotes();
     // eslint-disable-next-line
@@ -27,32 +29,37 @@ function Notes() {
   const handleClick = ()=>{
     console.log(note);
     editNote(note.id,note.etitle,note.edescription,note.etag);
+    // getNotes();
     refClose.current.click();
-    getNotes();
   }
-  // const deleteAlert = ()=>{
-  //   refAlert.current.click();
-  // }
-  return (
+  const deleteNotewithAlert = ()=>{
+    console.log("clicked bro");
+    refDel.current.click();
+    deleteNote(delid);
+    // deleteNote(id);
+  }
+  const handleAlertClick = (id)=>{
+    refAlert.current.click();
+    setdelId(id)
+    // deleteNotewithAlert(id);
+  }
+  return ( 
     <>
       {/* for delete */}
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+<button type="button" className="btn btn-primary d-none" data-bs-toggle="modal" data-bs-target="#staticBackdrop" ref={refAlert}>
   Launch static backdrop modal
 </button>
 
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div className="modal-dialog">
+    <div className="modal-content">
+      <div className="modal-header">
+        <h1 className="modal-title fs-5" id="staticBackdropLabel">Are You Sure You Want To Delete The Note ?</h1>
+        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="no">No</button>
-        <button type="button" class="btn btn-primary" id="yes">Yes</button>
+      <div className="modal-footer">
+        <button ref={refDel} type="button" className="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button onClick={deleteNotewithAlert} type="button" className="btn btn-primary" id="yes">Yes</button>
       </div>
     </div>
   </div>
@@ -60,7 +67,7 @@ function Notes() {
       {/* //for edit      */}
       <button
         type="button"
-        class="btn btn-primary d-none"
+        className="btn btn-primary d-none"
         data-bs-toggle="modal"
         data-bs-target="#exampleModal"
         ref={ref}
@@ -69,26 +76,26 @@ function Notes() {
       </button>
 
       <div
-        class="modal fade"
+        className="modal fade"
         id="exampleModal"
         tabindex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden="true"
       >
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h1 class="modal-title fs-5" id="exampleModalLabel">
+        <div className="modal-dialog">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h1 className="modal-title fs-5" id="exampleModalLabel">
                 Edit note
               </h1>
               <button
                 type="button"
-                class="btn-close"
+                className="btn-close"
                 data-bs-dismiss="modal"
                 aria-label="Close"
               ></button>
             </div>
-            <div class="modal-body">
+            <div className="modal-body">
               <div className="mb-3">
                 <label htmlFor="etitle" className="form-label">
                   Title
@@ -133,16 +140,16 @@ function Notes() {
                 />
               </div>
             </div>
-            <div class="modal-footer">
+            <div className="modal-footer">
               <button
                 type="button"
-                class="btn btn-secondary"
+                className="btn btn-secondary"
                 data-bs-dismiss="modal"
                 ref={refClose}
               >
                 Close
               </button>
-              <button onClick={handleClick} type="button" class="btn btn-primary">
+              <button onClick={handleClick} disabled={note.etitle.length<5 || note.edescription.length<5}  type="button" className="btn btn-primary">
                 Save changes
               </button>
             </div>
@@ -152,7 +159,7 @@ function Notes() {
       <div className="row">
         <h2>Your Notes</h2>
         {notes.map((note) => {
-          return <Noteitem key={note._id} updateNote={updateNote}  note={note} />; 
+          return <Noteitem key={note._id} updateNote={updateNote} handleAlertClick={handleAlertClick} note={note} />; 
         })}
       </div>
     </>
