@@ -1,8 +1,10 @@
 import React, { useContext, useEffect,useRef,useState } from "react";
 import noteContext from "../context/notes/noteContext";
 import Noteitem from "../components/Noteitem";
+import { useNavigate } from "react-router-dom";
 
 function Notes() {
+  let navigate = useNavigate();
   const Context = useContext(noteContext);
   console.log("this is context", Context);
   const { notes, getNotes,editNote,deleteNote } = Context;
@@ -14,7 +16,12 @@ function Notes() {
   const refClose = useRef(null);
   const refDel = useRef(null);
   useEffect(() => {
-    getNotes();
+    if(localStorage.getItem("token")){
+      getNotes();
+    }
+    else{
+      navigate("/login");
+    }
     // eslint-disable-next-line
   }, []);
   const handleChange = (e)=>{
@@ -157,7 +164,11 @@ function Notes() {
         </div>
       </div>
       <div className="row">
+        
         <h2>Your Notes</h2>
+        <div className="container mx-2">
+          {notes.length===0 && "Please add notes" }
+        </div>
         {notes.map((note) => {
           return <Noteitem key={note._id} updateNote={updateNote} handleAlertClick={handleAlertClick} note={note} />; 
         })}

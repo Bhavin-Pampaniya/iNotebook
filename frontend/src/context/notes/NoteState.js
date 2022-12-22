@@ -7,28 +7,35 @@ const NoteState = (props) => {
 
   const getNotes = async () => {
     console.log("called");
-    // API call/
-    const header = {
-      method: "GET",
-      headers: {
+    const token = localStorage.getItem("token");
+    console.log(token);
+    if(!token) return setNotes([])
+
+      // API call/
+      const header = {
+        method: "GET",
+        headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM2OGU1MjNlNzNmMjM3OTg5ODNmZjFlIn0sImlhdCI6MTY2NzgyMTM1N30.8LngCJ5nKtj83YW8X6eGaY3EOzciu9Ek_S7ejYKFHVg",
+        token,
       },
     };
     const response = await fetch(`${host}/api/notes/getnotes`, header);
     const data = await response.json();
     setNotes(data);
     console.log(data);
+ 
   };
   const addNote = async (title, description, tag) => {
+    const token = localStorage.getItem("token");
+
     //API CALL
     const header = {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM2OGU1MjNlNzNmMjM3OTg5ODNmZjFlIn0sImlhdCI6MTY2NzgyMTM1N30.8LngCJ5nKtj83YW8X6eGaY3EOzciu9Ek_S7ejYKFHVg",
+          token,
       },
       body: JSON.stringify({ title, description, tag }),
     };
@@ -48,12 +55,14 @@ const NoteState = (props) => {
     setNotes(notes.concat(note));
   };
   const deleteNote = async (id) => {
+    const token = localStorage.getItem("token");
+
     //API call
     const header = {
       method: "DELETE",
       headers: {
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM2OGU1MjNlNzNmMjM3OTg5ODNmZjFlIn0sImlhdCI6MTY2NzgyMTM1N30.8LngCJ5nKtj83YW8X6eGaY3EOzciu9Ek_S7ejYKFHVg",
+          token
       },
     };
     await fetch(`${host}/api/notes/deletenote/${id}`, header);
@@ -68,6 +77,8 @@ const NoteState = (props) => {
     // );
   };
   const editNote = async(id,title,description,tag) => {
+    const token = localStorage.getItem("token");
+
     console.log("id is ",id);
     //API call
     const header = {
@@ -75,7 +86,7 @@ const NoteState = (props) => {
       headers: { 
         "Content-Type": "application/json",
         "auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7ImlkIjoiNjM2OGU1MjNlNzNmMjM3OTg5ODNmZjFlIn0sImlhdCI6MTY2NzgyMTM1N30.8LngCJ5nKtj83YW8X6eGaY3EOzciu9Ek_S7ejYKFHVg",
+          token
       },
       body: JSON.stringify({ title, description, tag }),
     };
